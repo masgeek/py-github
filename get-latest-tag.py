@@ -20,8 +20,8 @@ myGithub = Github(gitToken)
 repo = myGithub.get_repo(repo)
 releaseTag = repo.get_latest_release().tag_name
 
-print(releaseTag)
-
 tagFile = open("latest_tag.txt", "w")
 tagFile.write(releaseTag)
 tagFile.close()
+
+print(releaseTag)

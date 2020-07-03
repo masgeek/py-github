@@ -14,13 +14,18 @@ if 'REPO_NAME' in environ:
 else:
     repo = "masgeek/akilimo-mobile"
 
+if 'LATEST_TAG_FILE' in environ:
+    tagFile = (environ.get('LATEST_TAG_FILE'))
+else:
+    tagFile = "latest_tag.txt"
+
 # or using an access token
 myGithub = Github(gitToken)
 
 repo = myGithub.get_repo(repo)
 releaseTag = repo.get_latest_release().tag_name
 
-tagFile = open("latest_tag.txt", "w")
+tagFile = open(tagFile, "w")
 tagFile.write(releaseTag)
 tagFile.close()
 

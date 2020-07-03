@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='py-github',
     version='1.0.0',
-    packages=[''],
+    packages=['py-github'],
     url='https://github.com/masgeek/py-github.git',
     license='MIT',
     author='Sammy Barasa',

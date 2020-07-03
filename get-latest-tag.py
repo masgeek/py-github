@@ -1,8 +1,8 @@
 from os import environ
-from dotenv import load_dotenv
 from github import Github
+from environs import Env
 
-load_dotenv(verbose=True)
+env = Env()
 
 if 'GITHUB_TOKEN' in environ:
     gitToken = (environ.get('GITHUB_TOKEN'))
@@ -19,6 +19,7 @@ if 'LATEST_TAG_FILE' in environ:
 else:
     tagFile = "latest_tag.txt"
 
+print(tagFile)
 # or using an access token
 myGithub = Github(gitToken)
 

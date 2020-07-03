@@ -1,1 +1,8 @@
 venv
+*.iml
+.idea
+.env
+latest_tag.txt
+py_github.egg-info
+dist
+build

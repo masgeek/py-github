@@ -4,3 +4,4 @@ venv
 .env
 latest_tag.txt
 dist
+build

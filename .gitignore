@@ -3,3 +3,4 @@ venv
 .idea
 .env
 latest_tag.txt
+dist

@@ -1,0 +1,8 @@
+README.md
+get-latest-tag.py
+setup.py
+py_github.egg-info/PKG-INFO
+py_github.egg-info/SOURCES.txt
+py_github.egg-info/dependency_links.txt
+py_github.egg-info/requires.txt
+py_github.egg-info/top_level.txt

@@ -1,0 +1,13 @@
+Metadata-Version: 1.2
+Name: py-github
+Version: 1.0.0
+Summary: Python github api utilities
+Home-page: https://github.com/masgeek/py-github.git
+Author: Sammy Barasa
+Author-email: barsamms@gmail.com
+License: MIT
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3

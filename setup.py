@@ -1,20 +1,28 @@
-from setuptools import setup
+import setuptools
 
-setup(
+# from setuptools import setup
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setuptools.setup(
     name='py-github',
     version='1.0.0',
-    packages=['py-github'],
+    packages=setuptools.find_packages(),
     url='https://github.com/masgeek/py-github.git',
     license='MIT',
     author='Sammy Barasa',
     author_email='barsamms@gmail.com',
     description='Python github api utilities',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
+        "Operating System :: OS Independent"
     ],
     python_requires='>=3',
     install_requires=[
-        "PyGithub", "python-dotenv[cli]"
+        "PyGithub", "python-dotenv[cli]", "wheel"
     ],
 )

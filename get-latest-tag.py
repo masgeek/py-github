@@ -1,23 +1,13 @@
-from os import environ
 from github import Github
 from environs import Env
 
 env = Env()
 
-if 'GITHUB_TOKEN' in environ:
-    gitToken = (environ.get('GITHUB_TOKEN'))
-else:
-    gitToken = ""
+env.read_env(".env",recurse=False,verbose=True)
 
-if 'REPO_NAME' in environ:
-    repo = (environ.get('REPO_NAME'))
-else:
-    repo = "masgeek/akilimo-mobile"
-
-if 'LATEST_TAG_FILE' in environ:
-    tagFile = (environ.get('LATEST_TAG_FILE'))
-else:
-    tagFile = "latest_tag.txt"
+gitToken = env('GITHUB_TOKEN')
+repo = env('REPO_NAME')
+tagFile = env('LATEST_TAG_FILE')
 
 print(tagFile)
 # or using an access token

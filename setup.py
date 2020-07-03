@@ -14,7 +14,7 @@ with open(os.path.join(HERE, "README.md")) as fid:
 setup(
     name="realpython-reader",
     version="1.0.0",
-    description="Read the latest Real Python tutorials",
+    description="Read the latest release tag",
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/realpython/reader",
@@ -28,7 +28,7 @@ setup(
     packages=["reader"],
     include_package_data=True,
     install_requires=[
-        "PyGithub","python-dotenv"
+        "PyGithub", "python-dotenv[cli]"
     ],
     entry_points={"console_scripts": ["realpython=reader.__main__:main"]},
 )

@@ -28,7 +28,7 @@ setup(
     packages=["reader"],
     include_package_data=True,
     install_requires=[
-        "PyGithub "
+        "PyGithub","python-dotenv"
     ],
     entry_points={"console_scripts": ["realpython=reader.__main__:main"]},
 )

@@ -22,6 +22,6 @@ setup(
     ],
     python_requires='>=3',
     install_requires=[
-        "PyGithub", "python-env"
+        "PyGithub", "python-env", "requests", "json"
     ],
 )

@@ -15,6 +15,9 @@ myGithub = Github(gitToken)
 
 repo = myGithub.get_repo(repo)
 releaseTag = repo.get_latest_release().tag_name
+pr = repo.create_git_blob()
+
+print(pr)
 
 tagFile = open(tagFile, "w")
 tagFile.write(releaseTag)

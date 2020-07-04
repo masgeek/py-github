@@ -1,15 +1,15 @@
 from github import Github
-from environs import Env
+import dotenv
 
-env = Env()
+dotenv.load()
 
-env.read_env(".env",recurse=False,verbose=True)
+gitToken = dotenv.get('GITHUB_TOKEN')
+repo = dotenv.get('REPO_NAME')
+tagFile = dotenv.get('LATEST_TAG_FILE')
 
-gitToken = env('GITHUB_TOKEN')
-repo = env('REPO_NAME')
-tagFile = env('LATEST_TAG_FILE')
-
+print(repo)
 print(tagFile)
+
 # or using an access token
 myGithub = Github(gitToken)
 

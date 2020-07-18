@@ -1,11 +1,12 @@
 from github import Github
-import dotenv
+from os import getenv, path
+from dotenv import load_dotenv
 
-dotenv.load()
+load_dotenv()
 
-gitToken = dotenv.get('GITHUB_TOKEN')
-repo = dotenv.get('REPO_NAME')
-tagFile = dotenv.get('LATEST_TAG_FILE')
+gitToken = getenv('GITHUB_TOKEN')
+repo = getenv('REPO_NAME')
+tagFile = getenv('LATEST_TAG_FILE')
 
 print(repo)
 print(tagFile)
@@ -15,7 +16,7 @@ myGithub = Github(gitToken)
 
 repo = myGithub.get_repo(repo)
 releaseTag = repo.get_latest_release().tag_name
-pr = repo.create_git_blob()
+pr = repo.create_git_blob
 
 print(pr)
 

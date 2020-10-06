@@ -3,7 +3,7 @@ from environs import Env
 
 env = Env()
 
-env.read_env(".env",recurse=False,verbose=True)
+env.read_env(".env")
 
 gitToken = env('GITHUB_TOKEN')
 repo = env('REPO_NAME')

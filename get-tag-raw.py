@@ -13,7 +13,7 @@ tagFile = getenv('LATEST_TAG_FILE')
 
 rootUrl = "https://api.github.com"
 
-url = rootUrl + "/repos/" + repo + "/pulls?base=masters&state=open"
+url = rootUrl + "/repos/" + repo + "/pulls?base=master&state=open"
 payload = ""
 headers = {'authorization': 'token ' + gitToken}
 
@@ -40,6 +40,7 @@ try:
         tag = tagArr[len(tagArr) - 1]
     except (IndexError, KeyError, TypeError) as err:
         print(f'Index error has occurred: {err}')
+        print("Pulling from releases")
         jsonResponse = latest_tag()
         tag = jsonResponse['tag_name']
 

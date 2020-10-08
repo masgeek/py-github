@@ -34,8 +34,14 @@ def latest_tag():
 
 print(url)
 try:
-    jsonResponse = latest_tag()
-    tag = jsonResponse['tag_name']
+    try:
+        jsonResponse = get_pull_request()
+        tagArr = (jsonResponse[0]['title']).split()
+        tag = tagArr[len(tagArr) - 1]
+    except (IndexError, KeyError, TypeError) as err:
+        print(f'Index error has occurred: {err}')
+        jsonResponse = latest_tag()
+        tag = jsonResponse['tag_name']
 
     tagFile = open(tagFile, "w")
     tagFile.write(tag)

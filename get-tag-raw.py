@@ -13,6 +13,8 @@ tagFile = getenv('LATEST_TAG_FILE')
 
 rootUrl = "https://api.github.com"
 
+print(rootUrl)
+
 url = rootUrl + "/repos/" + repo + "/pulls?base=master&state=open"
 payload = ""
 headers = {'authorization': 'token ' + gitToken}

@@ -1,0 +1,4 @@
+setuptools~=49.2.0
+python-dotenv~=0.14.0
+PyGithub~=1.51
+requests~=2.22.0

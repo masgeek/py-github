@@ -9,26 +9,27 @@ load_dotenv()
 
 gitToken = getenv('GITHUB_TOKEN')
 repo = getenv('REPO_NAME')
-tagFile = getenv('LATEST_TAG_FILE')
+tagFile = getenv('LATEST_TAG_FILE', 'latest_tag.txt')
+baseBranch = getenv('BASE_BRANCH', 'main')
 
 rootUrl = "https://api.github.com"
 
 print(rootUrl)
 
-url = rootUrl + "/repos/" + repo + "/pulls?base=main&state=open"
+url = "{0}/repos/{1}/pulls?base={2}&state=open".format(rootUrl, repo, baseBranch)
 payload = ""
 headers = {'authorization': 'token ' + gitToken}
 
 
 def get_pull_request():
-    _url = rootUrl + "/repos/" + repo + "/pulls?base=main&state=open"
+    _url = "{0}/repos/{1}/pulls?base={2}&state=open".format(rootUrl, repo, baseBranch)
     _response = requests.get(_url, data=payload, headers=headers)
     _response.raise_for_status()
     return _response.json()
 
 
 def latest_tag():
-    _url = rootUrl + "/repos/" + repo + "/releases/latest"
+    _url = "{0}/repos/{1}/releases/latest".format(rootUrl, repo)
     _response = requests.get(_url, data=payload, headers=headers)
     _response.raise_for_status()
     return _response.json()

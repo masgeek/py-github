@@ -15,13 +15,13 @@ rootUrl = "https://api.github.com"
 
 print(rootUrl)
 
-url = rootUrl + "/repos/" + repo + "/pulls?base=master&state=open"
+url = rootUrl + "/repos/" + repo + "/pulls?base=main&state=open"
 payload = ""
 headers = {'authorization': 'token ' + gitToken}
 
 
 def get_pull_request():
-    _url = rootUrl + "/repos/" + repo + "/pulls?base=master&state=open"
+    _url = rootUrl + "/repos/" + repo + "/pulls?base=main&state=open"
     _response = requests.get(_url, data=payload, headers=headers)
     _response.raise_for_status()
     return _response.json()

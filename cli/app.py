@@ -145,8 +145,8 @@ def repos(
     Example:
         github-invite repos --csv repos.csv --org myorg --private --auto-init
     """
-    if not token or not org:
-        logger.error("Missing required parameters: token and org")
+    if not token:
+        logger.error("Missing required parameters: token")
         raise typer.Exit(code=1)
 
     client = GitHubClient(token)
@@ -169,6 +169,8 @@ def repos(
                 config.gitignore_template = gitignore
             if not config.license_template and license:
                 config.license_template = license
+
+            config.auto_init = auto_init
 
             if dry_run:
                 logger.info(f"[DRY RUN] Would create: {config.name}")

@@ -27,6 +27,7 @@ packages = [
 
 [project.scripts]
 fetch-tag = "latest_tag.cli:app"
+invite = "org.invite:app"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

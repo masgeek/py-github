@@ -21,15 +21,14 @@ class GitHubClient:
     """Advanced GitHub API client."""
 
     def __init__(
-        self,
-        token: str,
-        org: Optional[str] = None,
-        dry_run: bool = False,
-        max_retries: int = 3,
-        backoff_factor: float = 1.5,
+            self,
+            token: str,
+            org: Optional[str] = None,
+            dry_run: bool = False,
+            max_retries: int = 3,
+            backoff_factor: float = 1.5,
     ):
         self.token = token
-        self.org = org or os.getenv("GITHUB_ORG")
         self.dry_run = dry_run
         self.max_retries = max_retries
         self.backoff_factor = backoff_factor
@@ -188,9 +187,7 @@ class GitHubClient:
     def create_repository(self, org: Optional[str], config: RepositoryConfig) -> bool:
         """
         Create a GitHub repository under the specified organization or the authenticated user.
-        Falls back to self.org if org is not provided.
         """
-        org = org or self.org
         if org:
             url = f"{GITHUB_API_BASE}/orgs/{org}/repos"
         else:

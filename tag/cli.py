@@ -15,14 +15,16 @@ def get_headers(token: str):
 
 @app.command()
 def fetch(
-        repo: str = typer.Option(getenv("GITHUB_REPOSITORY", ""), help="GitHub repo in 'owner/repo' format"),
-        token: str = typer.Option(getenv("GITHUB_TOKEN", ""), help="GitHub token (env: GITHUB_TOKEN)"),
-        disallow: str = typer.Option(getenv("DISALLOWED_ASSET_EXTS", ""),
-                                     help="Comma-separated disallowed extensions"),
-        output: str = typer.Option(getenv("LATEST_TAG_FILE", "latest_tag.txt"), help="Output file to write the tag"),
+        repo: str = typer.Option(None, "--repo", "-r", help="GitHub repo in 'owner/repo' format",
+                                 envvar="GITHUB_REPOSITORY"),
+        token: str = typer.Option(None, "--token", "-t", help="GitHub token with repo scopes",
+                                  envvar="GITHUB_TOKEN"),
+        disallow: str = typer.Option("", "--token", "-t", help="Comma-separated disallowed extensions",
+                                     envvar="DISALLOWED_ASSET_EXTS"),
 
 ):
     """
+
     Fetch the latest GitHub release tag, skipping if disallowed asset types (.apk, .aab, etc.) are present.
     """
     if not repo or not token:
@@ -55,3 +57,7 @@ def fetch(
     except requests.RequestException as e:
         logger.error(f"Error fetching release: {e}")
         raise typer.Exit(code=3)
+
+
+if __name__ == "__main__":
+    app()

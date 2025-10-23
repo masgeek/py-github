@@ -25,7 +25,7 @@ def invite(
                                       exists=True),
         org: str = typer.Option(None, "--org", "-o", help="GitHub organization name", envvar="GITHUB_ORG"),
         token: str = typer.Option(None, "--token", "-t", help="GitHub token with admin:org scope",
-                                  envvar="GITHUB_ORG_TOKEN"),
+                                  envvar="GITHUB_TOKEN"),
         team_slug: Optional[str] = typer.Option(None, "--team", help="Optional team slug to add invited members"),
         dry_run: bool = typer.Option(False, "--dry-run", help="Preview invitations without sending them"),
         skip_header: bool = typer.Option(True, "--skip-header/--no-skip-header",
@@ -90,7 +90,7 @@ def repos(
         csv_file: Path = typer.Option(..., "--csv", "-c", help="Path to CSV file with repository details", exists=True),
         org: str = typer.Option(None, "--org", "-o", help="GitHub organization name", envvar="GITHUB_ORG"),
         token: str = typer.Option(None, "--token", "-t", help="GitHub token with admin:org and repo scopes",
-                                  envvar="GITHUB_ORG_TOKEN"),
+                                  envvar="GITHUB_TOKEN"),
         private: bool = typer.Option(True, "--private/--public",
                                      help="Create repositories as private (default) or public"),
         auto_init: bool = typer.Option(False, "--auto-init/--no-auto-init", help="Initialize repositories with README"),
@@ -190,10 +190,10 @@ def token(
             except Exception as e:
                 logger.error(f"Failed to save token: {e}")
                 typer.echo("\n⚠ Could not save to .env file. Please save manually:")
-                typer.secho(f"  GITHUB_ORG_TOKEN={access_token}", fg="cyan")
+                typer.secho(f"  GITHUB_TOKEN={access_token}", fg="cyan")
         else:
             typer.echo("\n⚠ Token not saved. Add to your .env file:")
-            typer.secho(f"  GITHUB_ORG_TOKEN={access_token}", fg="cyan")
+            typer.secho(f"  GITHUB_TOKEN={access_token}", fg="cyan")
 
         typer.echo("\n" + "=" * 60 + "\n")
 

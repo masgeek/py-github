@@ -22,11 +22,11 @@ include = ["pyproject.toml", "README.md", "latest_tag/**/*.py"]
 # Only needed if you're using packages (a src layout or submodule)
 # If not using __init__.py, this can be omitted or changed
 packages = [
-    { include = "latest_tag" }
+    { include = "tag" }
 ]
 
 [project.scripts]
-fetch-tag = "latest_tag.cli:app"
+fetch-tag = "tag.cli:app"
 invite = "org.invite:app"
 
 [build-system]

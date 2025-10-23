@@ -83,8 +83,8 @@ class TokenManager:
 
     @staticmethod
     def save_to_env(token: str, env_file: Path) -> None:
-        """Save or update GITHUB_ORG_TOKEN in .env file."""
-        token_key = "GITHUB_ORG_TOKEN"
+        """Save or update GITHUB_TOKEN in .env file."""
+        token_key = "GITHUB_TOKEN"
         token_line = f"{token_key}={token}\n"
 
         existing_lines = []

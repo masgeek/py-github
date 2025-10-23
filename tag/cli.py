@@ -24,7 +24,6 @@ def fetch(
 
 ):
     """
-
     Fetch the latest GitHub release tag, skipping if disallowed asset types (.apk, .aab, etc.) are present.
     """
     if not repo or not token:

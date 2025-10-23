@@ -272,7 +272,7 @@ github-tool invite \
 # ✓ Added bob to team 'engineering'
 ```
 
-### Example 2: Setup AgWise Platform Repositories
+### Example 2: Setup Platform Repositories
 
 This example creates all AgWise platform repositories. The CLI scripts live in `agwise-api`, while the core R packages are in `agwise-core`.
 

@@ -5,3 +5,4 @@ venv
 latest_tag.txt
 __pycache__
 dist/*.gz
+users.csv

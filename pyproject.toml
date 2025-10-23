@@ -1,12 +1,12 @@
 [project]
-name = "latest_tag"
+name = "github-tool"
 version = "1.0.4"
 description = "Tag fetcher for GitHub releases with optional asset filtering"
 authors = [
     { name = "Munywele Sammy Barasa", email = "sammy@munywele.co.ke" }
 ]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.13,<4"
 keywords = ["github", "releases", "cli", "automation", "tags"]
 license = { text = "MIT" }
 
@@ -18,7 +18,7 @@ dependencies = [
     "typer (>=0.16.0,<0.17.0)"
 ]
 
-include = ["pyproject.toml", "README.md", "latest_tag/**/*.py"]
+include = ["pyproject.toml", "README.md", "cli/**/*.py"]
 # Only needed if you're using packages (a src layout or submodule)
 # If not using __init__.py, this can be omitted or changed
 packages = [
@@ -26,8 +26,7 @@ packages = [
 ]
 
 [project.scripts]
-fetch-tag = "tag.cli:app"
-invite = "org.invite:app"
+invite = "cli.app:app"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

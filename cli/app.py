@@ -19,7 +19,7 @@ def fetch(
                                  envvar="GITHUB_REPOSITORY"),
         token: str = typer.Option(None, "--token", "-t", help="GitHub token with repo scopes",
                                   envvar="GITHUB_TOKEN"),
-        disallow: str = typer.Option("", "--token", "-t", help="Comma-separated disallowed extensions",
+        disallow: str = typer.Option("", "--exts", "-e", help="Comma-separated disallowed extensions",
                                      envvar="DISALLOWED_ASSET_EXTS"),
 
 ):

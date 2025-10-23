@@ -28,8 +28,8 @@ A powerful command-line tool for batch managing GitHub organization operations i
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/github-org-cli.git
-cd github-org-cli
+git clone https://github.com/yourusername/github-tool.git
+cd github-tool
 
 # Install dependencies with Poetry
 poetry install
@@ -37,16 +37,16 @@ poetry install
 # Activate the virtual environment
 poetry shell
 
-# The CLI will be available as 'github-invite'
-github-invite --help
+# The CLI will be available as 'github-tool'
+github-tool --help
 ```
 
 ### Alternative: Using pip
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/github-org-cli.git
-cd github-org-cli
+git clone https://github.com/yourusername/github-tool.git
+cd github-tool
 
 # Install dependencies
 pip install -r requirements.txt
@@ -59,7 +59,7 @@ pip install -e .
 
 ```toml
 [tool.poetry]
-name = "github-org-cli"
+name = "github-tool"
 version = "2.0.0"
 description = "GitHub Organization Management CLI Tool"
 authors = ["Your Name <your.email@example.com>"]
@@ -74,7 +74,7 @@ python-dotenv = "^1.0.0"
 loguru = "^0.7.0"
 
 [tool.poetry.scripts]
-github-invite = "github_cli.cli:app"
+github-tool = "cli.app:app"
 
 [build-system]
 requires = ["poetry-core"]
@@ -109,7 +109,7 @@ Create a `.env` file or let the token command create it:
 
 ```env
 GITHUB_ORG=your-organization-name
-GITHUB_ORG_TOKEN=ghp_your_token_here
+GITHUB_TOKEN=ghp_your_token_here
 ```
 
 ## 📖 Usage
@@ -119,14 +119,14 @@ GITHUB_ORG_TOKEN=ghp_your_token_here
 Invite users from a CSV file to your organization:
 
 ```bash
-# Basic invitation
-github-invite invite --csv users.csv --org myorg
+    # Basic invitation
+github-tool invite --csv users.csv --org myorg
 
 # Invite and add to a team
-github-invite invite --csv users.csv --org myorg --team developers
+github-tool invite --csv users.csv --org myorg --team developers
 
 # Dry run (preview without executing)
-github-invite invite --csv users.csv --org myorg --dry-run
+github-tool invite --csv users.csv --org myorg --dry-run
 ```
 
 **CSV Format (users.csv):**
@@ -151,16 +151,16 @@ Batch create repositories from a CSV file:
 
 ```bash
 # Create private repositories
-github-invite repos --csv repos.csv --org myorg
+github-tool repos --csv repos.csv --org myorg
 
 # Create public repositories with auto-initialization
-github-invite repos --csv repos.csv --org myorg --public --auto-init
+github-tool repos --csv repos.csv --org myorg --public --auto-init
 
 # Set default templates
-github-invite repos --csv repos.csv --org myorg --gitignore Python --license mit
+github-tool repos --csv repos.csv --org myorg --gitignore Python --license mit
 
 # Dry run
-github-invite repos --csv repos.csv --org myorg --dry-run
+github-tool repos --csv repos.csv --org myorg --dry-run
 ```
 
 **CSV Format (repos.csv):**
@@ -192,16 +192,16 @@ Generate a new GitHub Personal Access Token:
 
 ```bash
 # Generate and save to .env
-github-invite token
+github-tool token
 
 # Save to custom location
-github-invite token --env-file /path/to/.env
+github-tool token --env-file /path/to/.env
 
 # Just display, don't save
-github-invite token --no-save
+github-tool token --no-save
 
 # Custom scopes
-github-invite token --scopes "admin:org,repo,read:user"
+github-tool token --scopes "admin:org,repo,read:user"
 ```
 
 ### Version
@@ -209,7 +209,7 @@ github-invite token --scopes "admin:org,repo,read:user"
 Display version information:
 
 ```bash
-github-invite version
+github-tool version
 ```
 
 ## 🎯 Command Reference
@@ -260,7 +260,7 @@ charlie
 EOF
 
 # 2. Invite them and add to team
-github-invite invite \
+github-tool invite \
   --csv new-members.csv \
   --org mycompany \
   --team engineering
@@ -334,13 +334,15 @@ github-invite invite --csv users.csv --org myorg --dry-run
 ## 🏗️ Project Structure
 
 ```
-github-org-cli/
-├── github_cli/                 # Main package directory
-│   ├── __init__.py            # Package initialization
+github-tool/
+├── cli/                       # CLI interface package
+│   ├── __init__.py
+│   └── app.py                 # Command-line interface with Typer
+├── core/                      # Core functionality package
+│   ├── __init__.py
 │   ├── github_client.py       # GitHub API client
 │   ├── csv_processor.py       # CSV file processing
-│   ├── token_manager.py       # Token generation & management
-│   └── cli.py                 # Command-line interface
+│   └── token_manager.py       # Token generation & management
 ├── tests/                     # Test files
 │   ├── __init__.py
 │   ├── test_github_client.py
@@ -357,14 +359,17 @@ github-org-cli/
 └── README.md                 # This file
 ```
 
-### Module Organization
+### Package Organization
 
-**`github_cli/`** - Main package
+**`cli/`** - Command-line interface
+- **`__init__.py`** - Package initialization
+- **`app.py`** - Typer CLI application with all commands (invite, repos, token, version)
+
+**`core/`** - Core business logic
 - **`__init__.py`** - Exports main classes and version
 - **`github_client.py`** - GitHubClient, RepositoryConfig, API interactions
 - **`csv_processor.py`** - CSVProcessor for reading and parsing CSV files
 - **`token_manager.py`** - TokenManager for OAuth and .env management
-- **`cli.py`** - Typer CLI application with all commands
 
 ## 🔌 Using as a Library
 
@@ -414,11 +419,6 @@ pip install git+https://github.com/yourusername/github-org-cli.git
 
 # Or with Poetry
 poetry add git+https://github.com/yourusername/github-org-cli.git
-```ad_repositories("repos.csv")
-
-# Generate token
-token = TokenManager.generate_token()
-TokenManager.save_to_env(token, Path(".env"))
 ```
 
 ## 🐛 Troubleshooting
@@ -495,4 +495,4 @@ For issues, questions, or contributions, please:
 
 ---
 
-Made with ❤️ for efficient GitHub management
+Made with ❤️ for efficient GitHub organization management

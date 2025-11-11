@@ -11,7 +11,7 @@ jobs:
       tag: ${{ steps.fetch_tag.outputs.tag }}  # <-- Expose output to other jobs
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Fetch Latest GitHub Tag
         id: fetch_tag

@@ -1,6 +1,7 @@
 # ============================================================================
 # File: cli.py
 """Command-line interface for GitHub organization management."""
+import os
 import time
 from os import getenv
 from pathlib import Path
@@ -13,6 +14,7 @@ from loguru import logger
 from cli import GitHubClient, CSVProcessor, TokenManager
 
 load_dotenv()
+
 
 app = typer.Typer(
     help="Batch invite users to a GitHub organization with team management.",
@@ -33,10 +35,10 @@ def release_tag(
     Fetch the latest GitHub release tag, skipping if disallowed asset types (.apk, .aab, etc.) are present.
     """
     if not repo:
-        logger.error("Missing required environment variables: REPO_NAME.")
+        logger.error("Missing required environment variables: GITHUB_REPOSITORY")
         raise typer.Exit(code=1)
     if not token:
-        logger.error("Missing required environment variables: GITHUB_TOKEN.")
+        logger.error("Missing required environment variables: GITHUB_TOKEN")
         raise typer.Exit(code=1)
 
     client = GitHubClient(token)

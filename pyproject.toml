@@ -22,8 +22,11 @@ include = ["pyproject.toml", "README.md", "cli/**/*.py"]
 # Only needed if you're using packages (a src layout or submodule)
 # If not using __init__.py, this can be omitted or changed
 packages = [
-    { include = "tag" }
+    { include = "cli" }
 ]
+
+[tool.poetry]
+package-mode = true
 
 [project.scripts]
 invite = "cli.app:app"

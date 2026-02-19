@@ -1,0 +1,29 @@
+name: "Latest GitHub Tag"
+description: "Fetch the latest GitHub release tag with optional asset filtering"
+author: "masgeek"
+
+inputs:
+  repo:
+    description: "GitHub repository (owner/repo)"
+    required: true
+    default: ${{ github.repository }}
+  token:
+    description: "GitHub token"
+    required: true
+    default: ${{ github.token }}
+  disallow:
+    description: "Comma-separated disallowed extensions (e.g. .apk,.aab)"
+    required: false
+    default: ""
+  output:
+    description: "File to write the tag inside the container"
+    required: false
+    default: "latest_tag.txt"
+
+outputs:
+  tag:
+    description: "The latest release tag"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"

@@ -1,7 +1,13 @@
 name: "Fetch GitHub Release Tag"
 description: "Fetch the latest GitHub release tag unless disallowed assets are attached (e.g. .apk, .aab)."
 author: "Munywele Sammy Barasa"
-inputs: { }
+
+inputs:
+  version:
+    description: "Specific version of latest_tag to install from PyPI (e.g., 1.0.0)"
+    required: false
+    default: ""
+
 outputs:
   tag:
     description: "The fetched release tag"
@@ -15,17 +21,35 @@ runs:
       with:
         python-version: '3.13'
 
-    - name: 📦 Install Poetry
-      uses: abatilo/actions-poetry@v4
-
-    - name: 📦 Install CLI from wheel
+    - name: 📦 Install latest_tag CLI from PyPI
       run: |
-        pip install latest_tag
+        VERSION_INPUT="${{ inputs.version }}"
+        echo "Installing latest_tag${VERSION_INPUT:+==${VERSION_INPUT}} from PyPI..."
+
+        pip install latest_tag${VERSION_INPUT:+==${VERSION_INPUT}} \
+          --no-cache-dir \
+          --disable-pip-version-check
+
+        echo "Verifying CLI..."
+        if ! command -v fetch-tag &> /dev/null; then
+          echo "❌ 'fetch-tag' not found in PATH after install."
+          exit 1
+        fi
+
+        echo "✅ 'fetch-tag' CLI installed successfully."
       shell: bash
 
     - name: 🚀 Run fetch-tag
       id: fetch_tag
       run: |
-        TAG=$(poetry run fetch-tag)
+        echo "Running fetch-tag..."
+        TAG=$(fetch-tag)
+
+        if [[ -z "$TAG" ]]; then
+          echo "❌ No tag returned by fetch-tag"
+          exit 1
+        fi
+
+        echo "✅ Fetched tag: $TAG"
         echo "tag=$TAG" >> "$GITHUB_OUTPUT"
       shell: bash

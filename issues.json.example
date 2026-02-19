@@ -1,0 +1,10 @@
+{
+  "Issues": [
+    {
+      "title": "Amount Specification Button Inconsistency",
+      "description": "Amount selection/specification button does not pop up consistently when required.",
+      "priority": "High",
+      "labels": ["Nigeria", "Amount Specification", "Urgent", "bug"]
+    }
+  ]
+}

@@ -12,9 +12,10 @@ from dotenv import load_dotenv
 from loguru import logger
 
 from cli import GitHubClient, CSVProcessor, TokenManager
+from core.database import GitHubDatabase
+from core.github_issues import Issue, create_issues_from_json_file
 
 load_dotenv()
-
 
 app = typer.Typer(
     help="Batch invite users to a GitHub organization with team management.",
@@ -198,6 +199,52 @@ def repos(
     except Exception as e:
         logger.error(f"Error processing CSV: {e}")
         raise typer.Exit(code=1)
+
+
+@app.command(name="update_issues")
+def update_github_issues(
+        repo: str = typer.Option(getenv("GITHUB_REPOSITORY"), "--repo", "-r",
+                                 help="GitHub repo in 'owner/repo' format"),
+        github_token: str = typer.Option(getenv("GITHUB_TOKEN"), "--token", "-t",
+                                         help="GitHub token with admin:org and repo scopes"),
+        dry_run: bool = typer.Option(False, "--dry-run", help="Preview issue creation"),
+):
+    if not token:
+        logger.error("Missing required parameters: token")
+        raise typer.Exit(code=1)
+
+    client = GitHubClient(github_token)
+    db = GitHubDatabase()
+
+    issues = client.get_all_issues(repo)
+    db.upsert_issues(issues)
+
+
+@app.command(name="issues")
+def github_issues(
+        json_file: Path = typer.Option(..., "--json", "-j", help="Path to JSON file with issue details", exists=True),
+        repo: str = typer.Option(getenv("GITHUB_REPOSITORY"), "--repo", "-r",
+                                 help="GitHub repo in 'owner/repo' format"),
+        github_token: str = typer.Option(getenv("GITHUB_TOKEN"), "--token", "-t",
+                                         help="GitHub token with admin:org and repo scopes"),
+        dry_run: bool = typer.Option(False, "--dry-run", help="Preview issue creation"),
+):
+    if not token:
+        logger.error("Missing required parameters: token")
+        raise typer.Exit(code=1)
+
+    client = GitHubClient(github_token)
+    db = GitHubDatabase()
+    issues_objects = create_issues_from_json_file(json_file=json_file)
+    for issue in issues_objects:
+        exists = db.issue_exists(issue.title)
+        if not exists:
+            logger.info(f"Issue {issue.title} does not exist!")
+            logger.info(f"Issue: {issue}")
+            resp = client.create_issue(repo=repo, issue=issue)
+            logger.debug(f"Issue: {resp}")
+        else:
+            logger.info(f"Issue {issue.title} already exists!")
 
 
 @app.command()

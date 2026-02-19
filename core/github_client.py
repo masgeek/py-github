@@ -4,11 +4,13 @@
 import os
 import time
 import json
+from datetime import datetime
 from typing import Optional, Dict, Any, List, Generator
 from requests import Session, Response, RequestException
 from loguru import logger
 
 from core.dto import RepositoryConfig
+from core.github_issues import Issue
 
 GITHUB_API_BASE = "https://api.github.com"
 
@@ -29,6 +31,7 @@ class GitHubClient:
             backoff_factor: float = 1.5,
     ):
         self.token = token
+        self.org = org
         self.dry_run = dry_run
         self.max_retries = max_retries
         self.backoff_factor = backoff_factor
@@ -41,18 +44,22 @@ class GitHubClient:
 
         self.session = Session()
         self.session.headers.update(self.headers)
-
         logger.debug(f"GitHubClient initialized for org={self.org}, dry_run={self.dry_run}")
 
     # =======================
     # CORE NETWORK UTILITIES
     # =======================
-    def _handle_rate_limit(self, response: Response) -> None:
-        if response.status_code == 403 and response.headers.get("X-RateLimit-Remaining") == "0":
-            reset = int(response.headers.get("X-RateLimit-Reset", 0))
-            wait_seconds = max(reset - int(time.time()), 0)
-            logger.warning(f"Rate limit exceeded. Waiting {wait_seconds} seconds.")
-            time.sleep(wait_seconds + 1)
+    def _handle_rate_limit(self, response: Response, threshold: int = 50) -> None:
+        remaining = int(response.headers.get("X-RateLimit-Remaining", 0))
+        reset_epoch = int(response.headers.get("X-RateLimit-Reset", 0))
+        if remaining <= threshold:
+            wait_seconds = max(reset_epoch - int(time.time()), 0)
+            reset_time = datetime.fromtimestamp(wait_seconds).isoformat()
+            logger.warning(
+                f"Approaching rate limit (remaining={remaining})"
+                f"Waiting {wait_seconds} seconds until reset at {reset_time}"
+            )
+            time.sleep(wait_seconds)
 
     def _safe_json(self, response: Response) -> Dict[str, Any]:
         try:
@@ -61,7 +68,7 @@ class GitHubClient:
             logger.error("Invalid JSON in GitHub API response.")
             return {}
 
-    def _request(self, method: str, url: str, **kwargs) -> Response:
+    def _request(self, method: str, url: str, **kwargs) -> Response | None:
         """Resilient HTTP request with retries, rate-limit handling, and dry-run support."""
         if self.dry_run and method != "GET":
             logger.info(f"[DRY RUN] {method} {url} → {json.dumps(kwargs.get('json', {}), indent=2)}")
@@ -82,6 +89,7 @@ class GitHubClient:
                     raise GitHubAPIError(f"Request failed after {self.max_retries} retries: {e}")
                 sleep_time = self.backoff_factor * attempt
                 time.sleep(sleep_time)
+        return None
 
     # =======================
     # AUTH & VALIDATION
@@ -253,3 +261,44 @@ class GitHubClient:
                 if any(name.endswith(ext) for ext in disallowed_exts):
                     logger.error(f"Disallowed asset found in release {tag}: {name}")
         return tag
+
+    def create_issue(self, repo: str, issue: Issue) -> bool:
+        """
+        Create a single GitHub issue from an Issue object.
+
+        Returns True if created successfully, False otherwise.
+        """
+        data = {
+            "title": issue.title,
+            "body": issue.description,
+            "assignees": ["masgeek"],
+            "labels": issue.labels
+        }
+        resp = self._request("POST", f"{GITHUB_API_BASE}/repos/{repo}/issues", json=data)
+        if resp.status_code == 201:
+            logger.info(f"Issue created: {issue.title}")
+            return True
+        else:
+            logger.error(f"Failed to create issue '{issue.title}': {resp.json()}")
+            return False
+
+    def get_all_issues(self, repo: str) -> list[dict]:
+        """
+        Fetch all issues (open and closed) from GitHub with pagination.
+        """
+        url = f"{GITHUB_API_BASE}/repos/{repo}/issues"
+        page = 1
+        params = {"state": "all", "per_page": 100, "page": page}
+        all_issues = []
+        while True:
+            resp = self._request(method="GET", url=url, params=params)
+            resp.raise_for_status()
+            issues = self._safe_json(resp)
+            if not issues:
+                logger.info(f"No issues found for {repo}.")
+                break
+            logger.info(f"Found {len(issues)} issues for {repo}.")
+            all_issues.extend(issues)
+            params["page"] += 1
+
+        return all_issues

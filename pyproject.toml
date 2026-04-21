@@ -11,7 +11,7 @@ keywords = ["github", "releases", "cli", "automation", "tags"]
 license = { text = "MIT" }
 
 dependencies = [
-    "python-dotenv>=1.1.1,<2.0.0",
+    "python-dotenv>=1.2.2,<2.0.0",
     "loguru>=0.7.2,<1.0.0",
     "requests>=2.32.4,<3.0.0",
     "pygithub>=2.6.1,<3.0.0",
